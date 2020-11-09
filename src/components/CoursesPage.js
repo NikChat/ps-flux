@@ -1,42 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { getCourses } from "../api/courseApi";
+import CourseList from "./CourseList";
 
-class CoursesPage extends React.Component {
-  state = { // class field syntax (instead of constructor)
-    courses: []
-  };
+function CoursesPage() {
+  const [courses, setCourses] = useState([]);
 
-  componentDidMount() { // Request a list of courses when this page loads
-    getCourses().then(courses => this.setState({ courses: courses })); // the function in .then() will be called when the API call is completed
-  }
+  useEffect(() => {
+    getCourses().then(_courses => setCourses(_courses));
+  }, []); // second argument: The depedency array is a list of values that useEffect should watch. 
+          // It re-runs when values in this array change. Here it will run only 1 time.
+          // without the second argument: Calling setCourses causes the component to re-render, which caused useEffect to re-run
 
-  render() {
-    return (
-      <>
-        <h2>Courses</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author ID</th>
-              <th>Category</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.courses.map(course => {
-              return (
-                <tr key={course.id}>
-                  <td>{course.title}</td>
-                  <td>{course.authorId}</td>
-                  <td>{course.category}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </>
-    );
-  }
+  return (
+    <>
+      <h2>Courses</h2>
+      <CourseList courses={courses} />
+    </>
+  );
 }
 
 export default CoursesPage;
