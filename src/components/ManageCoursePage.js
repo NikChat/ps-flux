@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CourseForm from "./CourseForm";
 import * as courseApi from "../api/courseApi";
 import { toast } from "react-toastify";
@@ -12,6 +12,13 @@ const ManageCoursePage = props => {
     authorId: null,
     category: ""
   });
+
+  useEffect(() => { // we declare code we want to run when this component loads
+    const slug = props.match.params.slug; // read the slug from the path `/courses/:slug`
+    if (slug) { // if slug is in the url
+      courseApi.getCourseBySlug(slug).then(_course => setCourse(_course));
+    }
+  }, [props.match.params.slug]); // if the dependency changes, the effect will re-run
 
   function handleChange({ target }) { // event.target
     setCourse({
