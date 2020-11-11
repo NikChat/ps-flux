@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CourseForm from "./CourseForm";
-import * as courseApi from "../api/courseApi";
+import courseStore from "../stores/courseStore";
 import { toast } from "react-toastify";
+import * as courseActions from "../actions/courseActions";
 
 const ManageCoursePage = props => {
   const [errors, setErrors] = useState({});
@@ -16,7 +17,7 @@ const ManageCoursePage = props => {
   useEffect(() => { // we declare code we want to run when this component loads
     const slug = props.match.params.slug; // read the slug from the path `/courses/:slug`
     if (slug) { // if slug is in the url
-      courseApi.getCourseBySlug(slug).then(_course => setCourse(_course));
+      setCourse(courseStore.getCourseBySlug(slug));
     }
   }, [props.match.params.slug]); // if the dependency changes, the effect will re-run
 
@@ -42,7 +43,7 @@ const ManageCoursePage = props => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
-    courseApi.saveCourse(course).then(() => {
+    courseActions.saveCourse(course).then(() => {
       props.history.push("/courses"); // Programmatic Redirect to the CoursesPage with React Router (instead of <Redirect>)
       toast.success("Course saved.");
     });
