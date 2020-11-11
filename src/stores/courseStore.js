@@ -37,6 +37,12 @@ Dispatcher.register(action => {  // This will be called anytime an action is Dis
       _courses.push(action.course);
       store.emitChange();  // we call it anytime the store changes -> this notifies any React components registered with the store
       break;              // = any components that ever called addChangeListener, will be notified anytime I call emitChange
+    case actionTypes.UPDATE_COURSE:
+      _courses = _courses.map(course =>
+        course.id === action.course.id ? action.course : course
+      );
+      store.emitChange();
+      break;
     case actionTypes.LOAD_COURSES:
       _courses = action.courses;
       store.emitChange();
