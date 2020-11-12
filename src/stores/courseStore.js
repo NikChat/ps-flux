@@ -34,6 +34,7 @@ const store = new CourseStore();
 Dispatcher.register(action => {  // This will be called anytime an action is Dispatched (every store is notified of every action)
   switch (action.actionType) {
     case actionTypes.DELETE_COURSE:
+      // debugger; // 4. Store
       _courses = _courses.filter(
         course => course.id !== parseInt(action.id, 10)
       );

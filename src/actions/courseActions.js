@@ -24,6 +24,7 @@ export function loadCourses() {
 }
 
 export function deleteCourse(id) {
+  // debugger; // 2. Action -> 3. Dispatcher
   return courseApi.deleteCourse(id).then(() => {
     dispatcher.dispatch({
       actionType: actionTypes.DELETE_COURSE,

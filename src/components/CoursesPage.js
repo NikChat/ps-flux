@@ -16,6 +16,7 @@ function CoursesPage() {
                        // without the second argument: Calling setCourses causes the component to re-render, which caused useEffect to re-run
 
   function onChange() {
+    // debugger; // 5. React
     setCourses(courseStore.getCourses()); // get list of courses and update state, when courses are added to the store
   }
 

@@ -21,6 +21,7 @@ function CourseList(props) {
                 <button
                   className="btn btn-outline-danger"
                   onClick={() => {
+                    // debugger; // 1. React
                     props.deleteCourse(course.id);
                   }}
                 >
