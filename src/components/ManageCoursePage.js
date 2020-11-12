@@ -6,6 +6,7 @@ import * as courseActions from "../actions/courseActions";
 
 const ManageCoursePage = props => {
   const [errors, setErrors] = useState({});
+  const [courses, setCourses] = useState(courseStore.getCourses());
   const [course, setCourse] = useState({
     id: null,
     slug: "",
@@ -15,11 +16,20 @@ const ManageCoursePage = props => {
   });
 
   useEffect(() => { // we declare code we want to run when this component loads
+    courseStore.addChangeListener(onChange); // Run onChange function when the Flux store changes
     const slug = props.match.params.slug; // read the slug from the path `/courses/:slug`
-    if (slug) { // if slug is in the url
+    if (courses.length === 0) { // if the user loads the page directly, courses may not be loaded in the Flux store yet
+      courseActions.loadCourses();
+    } 
+    else if (slug) { // if slug is in the url
       setCourse(courseStore.getCourseBySlug(slug));
     }
-  }, [props.match.params.slug]); // if the dependency changes, the effect will re-run
+    return () => courseStore.removeChangeListener(onChange); // will run on un-mount
+  }, [courses.length, props.match.params.slug]); // If the page loads directly, first if will be executed, courses.length will change -> the effect will re-run
+
+  function onChange() {
+    setCourses(courseStore.getCourses());
+  }
 
   function handleChange({ target }) { // event.target
     setCourse({
