@@ -33,6 +33,12 @@ const store = new CourseStore();
 /* We Register the store with the dispatcher so that the store will be notified when actions occur: */
 Dispatcher.register(action => {  // This will be called anytime an action is Dispatched (every store is notified of every action)
   switch (action.actionType) {
+    case actionTypes.DELETE_COURSE:
+      _courses = _courses.filter(
+        course => course.id !== parseInt(action.id, 10)
+      );
+      store.emitChange();
+      break;
     case actionTypes.CREATE_COURSE:
       _courses.push(action.course);
       store.emitChange();  // we call it anytime the store changes -> this notifies any React components registered with the store
